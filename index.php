@@ -12,6 +12,7 @@
 
     if(isset($_POST['id']) && isset($_POST['pass']))
     {
+		$dom=$_POST['dom'];
         unset($_SESSION['id']);
         if ( strlen($_POST['id']) < 1 || strlen($_POST['pass']) < 1 )
         {
@@ -20,16 +21,16 @@
             return;
         }
         else
-        {
+        {				
                 $check = hash('md5', $salt.$_POST['pass']);
-                $stmt = $pdo->prepare('SELECT * FROM member WHERE id = :id AND pass_word = :pw AND role = :role');
-                $stmt->execute(array(':id' => $_POST['id'], ':pw' => $check, ':role' => $_POST['role']));
+                $stmt = $pdo->prepare('SELECT * FROM member WHERE id = :id AND pass_word = :pw');
+                $stmt->execute(array(':id' => $_POST['id'], ':pw' => $check));
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 if($row !== false)
                 {
                     $_SESSION['id'] = $row['member_id'];
                     $_SESSION['role'] = $row['role'];
-
+					$co=$row['Company_id'];
                     header("Location: home.php");
                     return;
                 }
@@ -38,18 +39,33 @@
                     $_SESSION['error'] = "Incorrect ID or Password<br>";
                     header("Location: index.php");
                     return;
+                }				
+				$stmt1 = $pdo->prepare('SELECT * FROM comapny WHERE Company_id =:co1');
+                $stmt1->execute(array(':id' => $_POST['id'], ':pw' => $check,':co1'=>$co));
+                $row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
+                if($row1 !== false)
+                {                  
+					$domain=$row1['Domain'];
+					if($domain==$dom)
+                    header("Location: home.php");
+                    return;
                 }
-            
-            
+                else
+                {
+                    $_SESSION['error'] = "Incorrect ID or Password or Domain<br>";
+                    header("Location: index.php");
+                    return;
+                }
         }
     }
 ?>
 
 <html>
 <head>
-    <title>Machine Tracking</title>
+    <title>PROVE</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="icon" type="image/png" href="favi.ico" />				
     <meta name="viewport" content="width = device-width, initial-scale = 1">
 
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
@@ -86,18 +102,19 @@
 
             <form method="POST" action="index.php" class="col-xs-5">
 
-                <p>Role : &nbsp&nbsp&nbsp
-                <input type="radio" name="role" value="0"> Admin &nbsp&nbsp&nbsp
-                <input type="radio" name="role" value="1" checked> Faculty &nbsp&nbsp&nbsp        
-                <input type="radio" name="role" value="2"> Technician       
-                </p>
+                
 
                 <div class="input-group">
                 <span class="input-group-addon">ID</span>
                 <input type="text" name="id" id="id" class="form-control" required placeholder="Enter your id">
                 <br>
             </div>
+			
             <br>
+			<div class="input-group">
+                <span class="input-group-addon">Domain</span>
+                <input type="text" name="dom" id="id" class="form-control" required placeholder="Enter your Domain name">
+				</div><br>
                 <div class="input-group">
                 <span class="input-group-addon">Password</span>
                 <input type="password" name="pass" id="pass" class="form-control" required="" placeholder="Enter Password">
