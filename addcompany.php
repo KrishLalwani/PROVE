@@ -33,9 +33,11 @@
         {
             $stmt = $pdo->prepare('INSERT INTO Company (Company_name,Domain,Owner,City,Country,Est) VALUES (:Company_Name,:Domain,:Owner,:City,:Country,:Establishment)');
 			$stmt->execute(array(':Company_Name' => $_POST['co_name'], ':Domain' => $_POST['domain'], ':Owner' => $_POST['owner'], ':City' => $_POST['city'], ':Country' => $_POST['country'], ':Establishment' => $_POST['est']));
-            $_SESSION['success'] = "Company Added Successfully";
+
 
             $id = $pdo->lastInsertId();
+
+            $_SESSION['success'] = "Company Added Successfully<br> Your company id is ".$id."<br> Please Remember it for future use.";
 
             if($_POST['pass'] === $_POST['c_pass'])
             {
@@ -78,9 +80,8 @@
 </head>
 <body>
     <div class="wrapper">
-    <?php if (isset($_SESSION['id'])&&$_SESSION['role']=='0') include "navbar.php";
-                else if(isset($_SESSION['id'])&&$_SESSION['role']=='1')  include "navbar_faculty.php";
-                else include "navbar_tech.php";?>
+    <?php if (isset($_SESSION['id'])) include "navbar.php";
+    else include "navbar_index.php"?>
       <div class="container-fluid row" id="content">
         <div class="page-header">
         <h1>ADD COMPANY</h1>

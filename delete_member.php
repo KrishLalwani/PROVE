@@ -1,21 +1,44 @@
 <?php
     session_start();
     require_once "pdo.php";
-    /*if( !isset($_SESSION['id']) )
+    if( !isset($_SESSION['id']) )
     {
         die('ACCESS DENIED');
     }
-    if( $_SESSION['role'] != '0' )
+    if(isset($_POST['cancel']))
     {
-        die('ACCESS DENIED');
-    }*/
+        header("Location: home.php");
+        return;
+    }
+    if (isset($_POST['mem']))
+    {
+
+        $stmt = $pdo->prepare('SELECT COUNT(*) FROM Member WHERE id = :dn AND Company_id=:cid');
+        $stmt->execute(array(':dn' => $_REQUEST['mid'],':cid'=>$_SESSION['cid']));
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if($row['COUNT(*)'] === '0')
+        {
+            $_SESSION['error'] = "This Member does not exist";
+            //$_SESSION['success'] = "id=".$_REQUEST['mid']."Cid=".$_SESSION['cid'];
+            header('Location: view_member.php');
+            return;
+        }
+        else
+        {
+            $stmt = $pdo->prepare('DELETE FROM Member where id = :dn AND Company_id= :cid');
+            $stmt->execute(array(':dn' => $_REQUEST['mid'],':cid'=>$_SESSION['cid']));
+            $_SESSION['success'] = "Member Deleted Sucessfully";
+            header('Location: home.php');
+            return;
+        }
+    }
 ?>
 <html>
 <head>
     <title>PROVE</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<link rel="icon" type="image/png" href="favi.ico" />		
+	<link rel="icon" type="image/png" href="favi.ico" />
     <meta name="viewport" content="width = device-width, initial-scale = 1">
 
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
@@ -29,31 +52,9 @@
 </head>
 <body>
     <div class="wrapper">
-	
-    <?php 
-		if (isset($_SESSION['mem']))  
-		{	
-			include "navbar.php";  
-			$stmt = $pdo->prepare('SELECT COUNT(*) FROM department WHERE Member_id = :dn');
-			$stmt->execute(array(':dn' => $_POST['id']));
-			$row = $stmt->fetch(PDO::FETCH_ASSOC);
-			if($row['COUNT(*)'] !== '0')
-			{
-				$_SESSION['error'] = "This Member does not exist";
-				header('Location: delete_member.php');
-				return;
-			}
-			else
-			{
-				$stmt = $pdo->prepare('delete from member where Member_id = :dn');
-				$stmt->execute(array(':dn' => $_POST['id']));
-				$_SESSION['success'] = "Member Removed Successfully";
-				header('Location: home.php');
-				return;
-			}  			
-		}
-		else
-			include "navbar_index.php";  ?>
+
+        <?php if (isset($_SESSION['id'])) include "navbar.php";
+        else include "navbar_index.php"?>
 		<div class="container-fluid row" id="content">
         <div class="page-header">
 			<h1>REMOVE MEMBER</h1>
@@ -71,18 +72,15 @@
         }
     ?>
 
-    <form method="POST" action="confirm_delete.php" class="col-xs-5">
+    <form method="POST" action="delete_member.php" class="col-xs-5">
 
-    <div class="input-group">
-    <span class="input-group-addon">Enter Id</span>
-    <input type="text" required name="id" class="form-control" placeholder="Enter Member Id"> </div><br/>
-    
-    <input type="submit" value="Remove Member" name="mem" class="btn btn-info">
+    <input type="submit" value="Confirm" name="mem" class="btn btn-info">
+    <input type="hidden" name="mid" value="<?= $_GET['mid'] ?>">
     <a class ="link-no-format" href="home.php"><div class="btn btn-my">Cancel</div></a>
     </form>
 
     </div>
-    
+
     <script type="text/javascript" src="script.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>

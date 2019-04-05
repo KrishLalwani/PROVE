@@ -1,36 +1,33 @@
 <?php
     session_start();
     require_once "pdo.php";
-    /*if( !isset($_SESSION['id']) )
+    if( !isset($_SESSION['id']) )
     {
         die('ACCESS DENIED');
     }
-    if( $_SESSION['role'] != '0' )
-    {
-        die('ACCESS DENIED');
-    }
+
     if(isset($_POST['cancel']))
     {
         header("Location: home.php");
         return;
-    }*/
+    }
 
     if(isset($_POST['spec']) )
     {
-		if(isset($_POST['cm']))		
-			$cm=1;		
+		if(isset($_POST['cm']))
+			$cm=1;
 		else
 			$cm=0;
-		if(isset($_POST['ct']))		
-			$ct=1;		
+		if(isset($_POST['ct']))
+			$ct=1;
 		else
 			$ct=0;
-		if(isset($_POST['cd']))		
-			$cd=1;		
+		if(isset($_POST['cd']))
+			$cd=1;
 		else
 			$cd=0;
-            $stmt = $pdo->prepare('SELECT COUNT(*) FROM role WHERE Role_name = Role_Name');
-            $stmt->execute(array('Role_Name' => $_POST['r_name']));
+            $stmt = $pdo->prepare('SELECT COUNT(*) FROM Role WHERE Role_name = :Role_Name AND Company_id=:cid');
+            $stmt->execute(array(':Role_Name' => $_POST['r_name'],':cid'=>$_SESSION['cid']));
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             if($row['COUNT(*)'] !== '0')
             {
@@ -39,13 +36,13 @@
                 return;
             }
             else
-            {				
-                $stmt = $pdo->prepare('INSERT INTO role (Role_name,Create_member,Create_Task,Create_Department) VALUES (:Role_Name,:cm,:ct,:cd)');
-                $stmt->execute(array(':Role_Name' => $_POST['r_name'],':cm' =>$cm,':ct' =>$ct,':cd' =>$cd));
+            {
+                $stmt = $pdo->prepare('INSERT INTO Role (Role_name,Create_member,Create_Task,Create_Department,Company_id) VALUES (:Role_Name,:cm,:ct,:cd,:cid)');
+                $stmt->execute(array(':Role_Name' => $_POST['r_name'],':cm' =>$cm,':ct' =>$ct,':cd' =>$cd,':cid'=>$_SESSION['cid']));
                 $_SESSION['success'] = "Role Added Successfully";
                     header('Location: home.php');
                     return;
-            }       
+            }
     }
 ?>
 <html>
@@ -66,9 +63,8 @@
 </head>
 <body>
     <div class="wrapper">
-    <?php if (isset($_SESSION['id'])&&$_SESSION['role']=='0') include "navbar.php"; 
-                else if(isset($_SESSION['id'])&&$_SESSION['role']=='1')  include "navbar_faculty.php";
-                else include "navbar_tech.php";?>
+    <?php if (isset($_SESSION['id'])) include "navbar.php";
+                else include "navbar_index.php"?>
       <div class="container-fluid row" id="content">
         <div class="page-header">
         <h1>ADD SPECIFICATION</h1>
@@ -91,7 +87,7 @@
         <div class="input-group">
         <span class="input-group-addon">Role Name </span>
         <input type="text" name="r_name" required class="form-control" placeholder="Role_Name" id="depname" onchange="Names('depname')" required> </div><br/>
-		
+
 		<div class="input-group">
         <div class="page-header">
         <h3>Permissions</h3>
@@ -102,7 +98,7 @@
 		&nbsp&nbsp&nbsp<input type="checkbox" name="cd">Create Department<br>
 		<br>
 
-    <div class="input-group">       
+    <div class="input-group">
         <input type="submit" value="Add Role" name="spec" class="btn btn-info">
 		&nbsp<a class ="link-no-format" href="home.php"><div class="btn btn-my">Cancel</div></a>
         </form>

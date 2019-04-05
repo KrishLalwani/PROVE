@@ -21,38 +21,22 @@
             return;
         }
         else
-        {				
+        {
                 $check = hash('md5', $salt.$_POST['pass']);
-                $stmt = $pdo->prepare('SELECT * FROM member WHERE id = :id AND pass_word = :pw');
-                $stmt->execute(array(':id' => $_POST['id'], ':pw' => $check));
+                $stmt = $pdo->prepare('SELECT * FROM Member WHERE id = :id AND password = :pw AND Company_id=:ci');
+                $stmt->execute(array(':id' => $_POST['id'], ':pw' => $check,':ci'=>$_POST['cid']));
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 if($row !== false)
                 {
-                    $_SESSION['id'] = $row['member_id'];
-                    $_SESSION['role'] = $row['role'];
-					$co=$row['Company_id'];
+                    $_SESSION['id'] = $row['Member_id'];
+                    $_SESSION['cid'] = $row['Company_id'];
+                    $_SESSION['success']=$co;
                     header("Location: home.php");
                     return;
                 }
                 else
                 {
-                    $_SESSION['error'] = "Incorrect ID or Password<br>";
-                    header("Location: index.php");
-                    return;
-                }				
-				$stmt1 = $pdo->prepare('SELECT * FROM comapny WHERE Company_id =:co1');
-                $stmt1->execute(array(':id' => $_POST['id'], ':pw' => $check,':co1'=>$co));
-                $row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
-                if($row1 !== false)
-                {                  
-					$domain=$row1['Domain'];
-					if($domain==$dom)
-                    header("Location: home.php");
-                    return;
-                }
-                else
-                {
-                    $_SESSION['error'] = "Incorrect ID or Password or Domain<br>";
+                    $_SESSION['error'] = "Incorrect ID or Password or Domain1<br>";
                     header("Location: index.php");
                     return;
                 }
@@ -65,7 +49,7 @@
     <title>PROVE</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<link rel="icon" type="image/png" href="favi.ico" />				
+	<link rel="icon" type="image/png" href="favi.ico" />
     <meta name="viewport" content="width = device-width, initial-scale = 1">
 
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
@@ -82,7 +66,7 @@
 
     <div class="wrapper" id="add-nav">
     <?php include 'navbar_index.php';?>
-    <h1>Machine Tracking</h1>
+    <h1>PROVE</h1>
     </div>
     <?php
         if ( isset($_SESSION['error']) )
@@ -102,18 +86,18 @@
 
             <form method="POST" action="index.php" class="col-xs-5">
 
-                
+
 
                 <div class="input-group">
                 <span class="input-group-addon">ID</span>
                 <input type="text" name="id" id="id" class="form-control" required placeholder="Enter your id">
                 <br>
             </div>
-			
+
             <br>
 			<div class="input-group">
-                <span class="input-group-addon">Domain</span>
-                <input type="text" name="dom" id="id" class="form-control" required placeholder="Enter your Domain name">
+                <span class="input-group-addon">Company Id</span>
+                <input type="text" name="cid" class="form-control" required placeholder="Enter your Company Id">
 				</div><br>
                 <div class="input-group">
                 <span class="input-group-addon">Password</span>

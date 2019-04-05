@@ -1,11 +1,7 @@
 <?php
     session_start();
     require_once "pdo.php";
-    /*if( !isset($_SESSION['id']) )
-    {
-        die('ACCESS DENIED');
-    }
-    if( $_SESSION['role'] != '0' )
+    if( !isset($_SESSION['id']) )
     {
         die('ACCESS DENIED');
     }
@@ -13,7 +9,7 @@
     {
         header("Location: home.php");
         return;
-    }*/
+    }
 
     $salt='new_ton56*';
 

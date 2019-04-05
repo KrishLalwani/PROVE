@@ -1,13 +1,9 @@
 <?php
     session_start();
-    /*if( !isset($_SESSION['id']) )
+    if( !isset($_SESSION['id']) )
     {
         die('ACCESS DENIED');
     }
-    if( $_SESSION['role'] != '0' )
-    {
-        die('ACCESS DENIED');
-    }*/
     require_once "pdo.php";
 ?>
 <html>
@@ -52,7 +48,7 @@
             $stmtread = $pdo->prepare("SELECT * FROM Member WHERE Company_id=:cid ORDER BY id");
             $stmtread->execute(array(':cid' => $_SESSION['cid']));
             echo ("<table class=\"table table-striped\">
-                <tr> <th>S.no.</th><th>I.D.</th><th>Name</th><th>Role</th><th>D.O.B.</th><th>Email</th><th>Address</th><th>Phone</th><th>Department</th><th>Leader</th> </tr>");
+                <tr> <th>S.no.</th><th>I.D.</th><th>Name</th><th>Role</th><th>D.O.B.</th><th>Email</th><th>Address</th><th>Phone</th><th>Department</th><th>Leader</th><th>Action</th> </tr>");
             while ( $row = $stmtread->fetch(PDO::FETCH_ASSOC) )
             {
                 $qr=$pdo->prepare("SELECT * from Role where Role_id = :rid");
@@ -100,6 +96,9 @@
                 echo ("</td>");
                 echo ("<td>");
                 echo(htmlentities($lid));
+                echo ("</td>");
+                echo ("<td>");
+                echo('<a style="color:red;" href="delete_member.php?mid='.$row['id'].'">Delete</a>');
                 echo ("</td>");
                 $i++;
             }

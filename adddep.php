@@ -1,11 +1,7 @@
 <?php
     session_start();
     require_once "pdo.php";
-    /*if( !isset($_SESSION['id']) )
-    {
-        die('ACCESS DENIED');
-    }
-    if( $_SESSION['role'] != '0' )
+    if( !isset($_SESSION['id']) )
     {
         die('ACCESS DENIED');
     }
@@ -13,11 +9,11 @@
     {
         header("Location: home.php");
         return;
-    }*/
+    }
 
     if(isset($_POST['add_co']) )
-    {        
-        $stmt = $pdo->prepare('SELECT COUNT(*) FROM department WHERE Name = :dn');
+    {
+        $stmt = $pdo->prepare('SELECT COUNT(*) FROM Department WHERE Name = :dn');
         $stmt->execute(array(':dn' => $_POST['de_name']));
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         if($row['COUNT(*)'] !== '0')
@@ -28,13 +24,13 @@
         }
         else
         {
-            $stmt = $pdo->prepare('INSERT INTO department (Name) VALUES (:Department_Name)');
-			$stmt->execute(array(':Department_Name' => $_POST['de_name']));
+            $stmt = $pdo->prepare('INSERT INTO Department (Name,Company_id) VALUES (:Department_Name,:cid)');
+			$stmt->execute(array(':Department_Name' => $_POST['de_name'],':cid'=>$_SESSION['cid']));
             $_SESSION['success'] = "Department Added Successfully";
             header('Location: home.php');
             return;
         }
-    }    
+    }
 ?>
 <html>
 <head>
@@ -54,9 +50,9 @@
 </head>
 <body>
     <div class="wrapper">
-    <?php if (isset($_SESSION['id'])&&$_SESSION['role']=='0') include "navbar.php"; 
-                else if(isset($_SESSION['id'])&&$_SESSION['role']=='1')  include "navbar_faculty.php";
-                else include "navbar_tech.php";?>
+
+        <?php if (isset($_SESSION['id'])) include "navbar.php";
+                    else include "navbar_index.php"?>
       <div class="container-fluid row" id="content">
         <div class="page-header">
         <h1>ADD Department</h1>
@@ -81,7 +77,7 @@
         <div class="input-group">
         <span class="input-group-addon">Department Name </span>
         <input type="text" name="de_name" required class="form-control" placeholder="Department_Name" id="depname" onchange="Names('depname')" required> </div><br/>
-		
+
 
         <input type="submit" value="Add Department" name="add_co" class="btn btn-info">
         <a class ="link-no-format" href="home.php"><div class="btn btn-my">Cancel</div></a>
