@@ -48,8 +48,8 @@
                 else
                 {
                     $check = hash('md5', $salt.$_POST['pass']);
-                    $stmt = $pdo->prepare('INSERT INTO member (id, first_name, last_name, email, pass_word ,role,contact_no) VALUES (:id, :fn, :ln, :em, :pw,:role,:cn)');
-                    $stmt->execute(array(':id' => $_POST['id'], ':fn' => $_POST['first_name'], ':ln' => $_POST['last_name'], ':em' => $_POST['email'], ':pw' => $check, ':role' => $_POST['role'], ':cn' => $_POST['contact_no']));
+                    $stmt = $pdo->prepare('INSERT INTO Member (id, Company_id, Name, DOB, Email, Address, Phone, Password ,Department_id, Leader_id, Role_id) VALUES (:id, :cid, :n, :dob, :em, :add,:ph, :pass, :did, :lid, :rid)');
+                    $stmt->execute(array(':id' => $_POST['id'], ':cid' => $_SESSION['cid'], ':n' => $_POST['name'], ':dob' => $_POST['dob'], ':em' => $_POST['email'], ':add' => $_POST['address'], ':ph' => $_POST['contact_no'], ':pass' => $check, ':did' => $_POST['department'], ':lid' => $_POST['leader'], ':rid' => $_POST['role']));
 
                     $_SESSION['success'] = "Member Added Successfully";
                     header('Location: home.php');
@@ -131,7 +131,7 @@
 
       <div class="input-group">
       <span class="input-group-addon">Department</span>
-      <select id="drop-other" name="department" class="form-control" onchange="Device();" required="">
+      <select id="drop-other" name="department" class="form-control" onchange="Device();">
         <?php
 
             $qr=$pdo->query("SELECT Name,Department_id from Department");
@@ -148,7 +148,7 @@
 
       <div class="input-group">
       <span class="input-group-addon">Leader</span>
-      <select id="drop-other" name="leader" class="form-control" onchange="Device();" required="">
+      <select id="drop-other" name="leader" class="form-control" onchange="Device();">
         <?php
 
             $qr=$pdo->prepare("SELECT Name,Member_id from Member where Leader_id = :lid");
@@ -165,7 +165,7 @@
 
       <div class="input-group">
       <span class="input-group-addon">Role</span>
-      <select id="drop-other" name="role" class="form-control" onchange="Device();" required="">
+      <select id="drop-other" name="role" class="form-control" onchange="Device();" >
         <?php
 
             $qr=$pdo->query("SELECT Role_id,Role_name from Role");
