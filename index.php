@@ -39,8 +39,8 @@
                     header("Location: index.php");
                     return;
                 }
-
-
+            
+            
         }
     }
 ?>
@@ -88,8 +88,8 @@
 
                 <p>Role : &nbsp&nbsp&nbsp
                 <input type="radio" name="role" value="0"> Admin &nbsp&nbsp&nbsp
-                <input type="radio" name="role" value="1" checked> Faculty &nbsp&nbsp&nbsp
-                <input type="radio" name="role" value="2"> Technician
+                <input type="radio" name="role" value="1" checked> Faculty &nbsp&nbsp&nbsp        
+                <input type="radio" name="role" value="2"> Technician       
                 </p>
 
                 <div class="input-group">
@@ -105,6 +105,7 @@
             </div>
             <br>
             <input type="submit" value="Log In" class="btn btn-info">
+			&nbsp<a class ="link-no-format" href="addcompany.php"><div class="btn btn-my">Add Company</div></a>
             </form>
         </div>
     </div>
