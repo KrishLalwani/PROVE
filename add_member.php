@@ -148,8 +148,7 @@
       <select id="drop-other" name="leader" class="form-control" onchange="Device();">
         <?php
 
-            $qr=$pdo->prepare("SELECT Name,Member_id from Member where Leader_id = :lid");
-            $qr->execute(array(':lid' => $_SESSION['mid']));
+            $qr=$pdo->query("SELECT Name,Member_id from Member");            
             while($rowx=$qr->fetch(PDO::FETCH_ASSOC))
             {
                 echo '<option value ='.$rowx[Member_id].'>';
