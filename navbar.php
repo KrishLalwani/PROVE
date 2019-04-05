@@ -1,7 +1,7 @@
 <!-- Sidebar Holder -->
 <nav id="sidebar">
     <div class="sidebar-header">
-        <a href="home.php"><h3>Machine Tracking</h3></a>
+        <a href="home.php"><h3>PROVE</h3></a>
     </div>
 
     <ul class="list-unstyled components">
@@ -10,71 +10,36 @@
             <a href="searchpc.php">Search Computer</a>
         </li>
         <li class="active">
-            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">Lab</a>
+            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">Member</a>
             <ul class="collapse list-unstyled" id="homeSubmenu">
-                <li><a href="addlab.php">Add Lab</a></li>
-                <li><a href="viewlab.php">View Lab</a></li>
-                <li><a href="deletelab.php">Delete Lab</a></li>
+                <li><a href="addlab.php">Add Member</a></li>
+                <li><a href="viewlab.php">View Members</a></li>
             </ul>
         </li>
         <li class="">
-            <a href="#machinemenu" data-toggle="collapse" aria-expanded="false">Machine</a>
+            <a href="#machinemenu" data-toggle="collapse" aria-expanded="false">Department</a>
             <ul class="collapse list-unstyled" id="machinemenu">
-                <li><a href="addmc.php">Add Machine</a></li>
-                <li><a href="deletemc.php">Delete Machine</a></li>
-                <li><a href="upgrademc.php">Upgrade Machine</a></li>
-                <li><a href="viewmc.php">View Machine</a></li>
-                <li><a href="new_machines.php">View Unpositioned Machine</a></li>
-                <li><a href="viewonrepairpc.php">View Machines on Repair</a></li>
-                <li><a href="posmc.php">Position New Machines</a></li>
-                <li><a href="scrapmc.php">Scrap Machine</a></li>
+                <li><a href="addmc.php">Add Department</a></li>
+                <li><a href="deletemc.php">View Departments</a></li>
             </ul>
         </li>
 
         <li class="">
-            <a href="#devicemenu" data-toggle="collapse" aria-expanded="false">Device</a>
+            <a href="#devicemenu" data-toggle="collapse" aria-expanded="false">Role</a>
             <ul class="collapse list-unstyled" id="devicemenu">
-                <li><a href="adddevice.php">Add Device</a></li>
-                <li><a href="viewdev.php">View Device</a></li>
+                <li><a href="adddevice.php">Add Role</a></li>
+                <li><a href="viewdev.php">View Roles</a></li>
             </ul>
         </li>
 
         <li class="">
-            <a href="#specmenu" data-toggle="collapse" aria-expanded="false">Specification</a>
+            <a href="#specmenu" data-toggle="collapse" aria-expanded="false">Task</a>
             <ul class="collapse list-unstyled" id="specmenu">
-                <li><a href="addspec.php">Add Specification</a></li>
-                <li><a href="deletespec.php">Delete Specification</a></li>
+                <li><a href="addspec.php">Create Task</a></li>
+                <li><a href="deletespec.php">View Tasks</a></li>
             </ul>
         </li>
 
-        <li>
-            <a href="viewmchistory.php">Computer History</a>
-        </li>
-        <li>
-            <a href="viewsummary.php">Stock Table</a>
-        </li>
-        <li class="">
-            <a href="#membermenu" data-toggle="collapse" aria-expanded="false">Members</a>
-            <ul class="collapse list-unstyled" id="membermenu">
-                <li><a href="add_member.php">Add Member</a></li>
-                <li><a href="view_member.php">View Members</a></li>
-                <li><a href="delete_member.php">Delete Member</a></li>
-            </ul>
-        </li>
-        <li class="">
-            <a href="#complaintmenu" data-toggle="collapse" aria-expanded="false">Register a complaint</a>
-            <ul class="collapse list-unstyled" id="complaintmenu">
-                <li><a href="complaint_form.php">Complaint for PC</a></li>
-                <li><a href="device_complaint_form.php">Complaint for Hardware</a></li>
-            </ul>
-        </li>
-        <li class="">
-            <a href="#requestmenu" data-toggle="collapse" aria-expanded="false">Send a Request</a>
-            <ul class="collapse list-unstyled" id="requestmenu">
-                <li><a href="request_form.php">Request for a PC</a></li>
-                <li><a href="issue_request.php">Request for Hardware</a></li>
-            </ul>
-        </li>
         <li class="">
             <a href="#contactmenu" data-toggle="collapse" aria-expanded="false">Contact</a>
             <ul class="collapse list-unstyled" id="contactmenu">
@@ -82,10 +47,6 @@
                 <li><a href="#view_member.php">krishlalwani1@gmail.com</a></li>
 
             </ul>
-        </li>
-        <li class="">
-            <a href="techreport.php">Generate Technician Report</a>
-        </li>
 
         <hr>
         <li>
