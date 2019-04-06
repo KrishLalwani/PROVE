@@ -12,9 +12,9 @@
     }
     if (isset($_POST['add']))
     {
-		for($i=1; $i<=$countQue; $i++)
+		for($i=1; $i<=$_POST['nom']; $i++)
 		{
-			$stmt = $pdo->prepare('INSERT INTO task
+			$stmt = $pdo->prepare('INSERT INTO Task
 				(Name,Description,Points,Member_id_created,Status,Member_id_assigned)
 				VALUES ( :name, :des, :point,:mid,:status,:mida)');
 			$stmt->execute(array(
@@ -36,7 +36,6 @@
             ':cid' => $_SESSION['cid']));
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
         $json = json_encode($results);
-        echo($json);
     }
 ?>
 
@@ -109,7 +108,10 @@
 	<div class="input-group">
 	<span class="input-group-addon">Description</span>
     <textarea name="des" rows="8" cols="60" class="form-control" required></textarea> </div><br/>
-    Add Members: <input type="submit" id="addQue" value="+" >
+    <div class="input-group">
+    <span class="input-group-addon">Number of Members</span>
+    <input type="number" name="nom" size="60" id="nom" class="form-control" required /> </div><br/>
+    <input type="button" value="OK" name="OK" class="btn btn-info" onclick="createTabs()">
     <p>
     <div id="question_fields">
     </div>
@@ -122,50 +124,16 @@
 
 <script>
 countQue = 0;
-mem=0;
-// http://stackoverflow.com/questions/17650776/add-remove-html-inside-div-using-javascript
-$(document).ready(function(){
-    window.console && console.log('Document ready called');
-    var json = <?php echo json_encode($json) ?>;
-    var data = JSON.parse(json);
-    window.console && console.log("json ="+json);
-    window.console && console.log(json[3]);
-    $('#addQue').click(function(event){
-        // http://api.jquery.com/event.preventdefault/
-        event.preventDefault();
-        if ( countQue >= 500 ) {
-            alert("Maximum of 500 position entries exceeded");
-            return;
-        }
-        countQue++;
-        window.console && console.log("Adding position "+countQue);
-        $('#question_fields').append(
-            '<div id="question'+countQue+'"> \
-			<div class="input-group">\
-    <span class="input-group-addon">Member Id</span>\
-    <select name="mid'+countQue+'" id="mid'+countQue+'" class="form-control input-lg" onclick="populateSelect()">\
-    </select>\
-      </div></br>\
-	<div class="input-group">\
-    <span class="input-group-addon">Points</span>\
-    <input type="text" name="point'+countQue+'" size="60" class="form-control" required /> </div><br/>\
-	<input type="button" value="Remove Member" onclick="$(\'#question'+countQue+'\').remove();return false;"><br>\
-            \<br>\
-            </div>');
-    });
 
-});
-
-
-function populateSelect() {
+function populateSelect(j) {
     // if(mem==0)
     {
         window.console && console.log('Document ready called 22');
 
          var json = <?php echo json_encode($json) ?>;
          var data = JSON.parse(json);
-
-         var ele = document.getElementById('mid'+countQue);
+         window.console && console.log("cq "+j);
+         var ele = document.getElementById('mid'+j);
          ele.innerHTML='';
          ele.innerHTML=ele.innerHTML+'<option value="">Select Member</option>';
                 for (var i = 0; i < data.length; i++) {
@@ -176,6 +144,29 @@ function populateSelect() {
                 // mem=1;
     }
 
+}
+
+function createTabs() {
+    window.console && console.log('Document ready called 33');
+    var cc=document.getElementById('nom');
+    var c=cc.value;
+    window.console && console.log(c);
+    var i;
+    for(i=1;i<=c;i++){
+    $('#question_fields').append(
+        '<div id="question'+i+'"> \
+        <div class="input-group">\
+<span class="input-group-addon">Member Id</span>\
+<select name="mid'+i+'" id="mid'+i+'" class="form-control input-lg">\
+</select>\
+  </div></br>\
+<div class="input-group">\
+<span class="input-group-addon">Points</span>\
+<input type="text" name="point'+i+'" size="60" class="form-control" required /> </div><br/>\
+        \<br>\
+        </div>');
+        populateSelect(i);
+}
 }
 
 </script>
