@@ -9,26 +9,34 @@
     {
         header("Location: home.php");
         return;
-    }    
+    }
     if (isset($_POST['add']))
-    {        	
+    {
 		for($i=1; $i<=$countQue; $i++)
-		{		
+		{
 			$stmt = $pdo->prepare('INSERT INTO task
 				(Name,Description,Points,Member_id_created,Status,Member_id_assigned)
 				VALUES ( :name, :des, :point,:mid,:status,:mida)');
 			$stmt->execute(array(
 				':name' => $_POST['title'],
 				':des' => $_POST['des'],
-				':point' => $_POST['point'.$i],				
-				':mid' => $_SESSION['id'],	
+				':point' => $_POST['point'.$i],
+				':mid' => $_SESSION['id'],
 				':status' => 0,
 				':mida' => $_POST['mid'.$i])
-            );      
+            );
 		}
 		$_SESSION['success']="Task added";
 		header("Location:home.php");
 		return;
+    }
+    else {
+        $statement = $pdo->prepare("SELECT Member_id, Company_id, Name FROM Member where Company_id = :cid");
+        $statement->execute(array(
+            ':cid' => $_SESSION['cid']));
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $json = json_encode($results);
+        echo($json);
     }
 ?>
 
@@ -58,6 +66,8 @@
     integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
     crossorigin="anonymous"></script>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width = device-width, initial-scale = 1">
@@ -76,7 +86,7 @@
     <div class="wrapper">
     <?php if (isset($_SESSION['id'])) include "navbar.php";
     else include "navbar_index.php"?>
-	<div class="container-fluid row" id="container">    
+	<div class="container-fluid row" id="container">
     <div class="page-header">
     <?php
     if ( isset($_SESSION['id']) )
@@ -99,7 +109,7 @@
 	<div class="input-group">
 	<span class="input-group-addon">Description</span>
     <textarea name="des" rows="8" cols="60" class="form-control" required></textarea> </div><br/>
-    Add Members: <input type="submit" id="addQue" value="+">
+    Add Members: <input type="submit" id="addQue" value="+" >
     <p>
     <div id="question_fields">
     </div>
@@ -112,16 +122,19 @@
 
 <script>
 countQue = 0;
-
+mem=0;
 // http://stackoverflow.com/questions/17650776/add-remove-html-inside-div-using-javascript
 $(document).ready(function(){
     window.console && console.log('Document ready called');
-
+    var json = <?php echo json_encode($json) ?>;
+    var data = JSON.parse(json);
+    window.console && console.log("json ="+json);
+    window.console && console.log(json[3]);
     $('#addQue').click(function(event){
         // http://api.jquery.com/event.preventdefault/
         event.preventDefault();
         if ( countQue >= 500 ) {
-            alert("Maximum of 50 position entries exceeded");
+            alert("Maximum of 500 position entries exceeded");
             return;
         }
         countQue++;
@@ -130,7 +143,9 @@ $(document).ready(function(){
             '<div id="question'+countQue+'"> \
 			<div class="input-group">\
     <span class="input-group-addon">Member Id</span>\
-    <input type="text" name="mid'+countQue+'" size="60" class="form-control" required /> </div><br/>\
+    <select name="mid'+countQue+'" id="mid'+countQue+'" class="form-control input-lg" onclick="populateSelect()">\
+    </select>\
+      </div></br>\
 	<div class="input-group">\
     <span class="input-group-addon">Points</span>\
     <input type="text" name="point'+countQue+'" size="60" class="form-control" required /> </div><br/>\
@@ -140,6 +155,28 @@ $(document).ready(function(){
     });
 
 });
+
+
+function populateSelect() {
+    // if(mem==0)
+    {
+        window.console && console.log('Document ready called 22');
+
+         var json = <?php echo json_encode($json) ?>;
+         var data = JSON.parse(json);
+
+         var ele = document.getElementById('mid'+countQue);
+         ele.innerHTML='';
+         ele.innerHTML=ele.innerHTML+'<option value="">Select Member</option>';
+                for (var i = 0; i < data.length; i++) {
+                    // POPULATE SELECT ELEMENT WITH JSON.
+                    ele.innerHTML = ele.innerHTML +
+                        '<option value="' + data[i]['Member_id'] + '">' + data[i]['Name'] + '</option>';
+                }
+                // mem=1;
+    }
+
+}
 
 </script>
 

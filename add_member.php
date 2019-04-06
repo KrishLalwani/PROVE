@@ -63,10 +63,9 @@
 ?>
 <html>
 <head>
-    <title>PROVE</title>
+    <title>Machine Tracking</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel = "icon" type = "image/png" href="favi.ico">
     <meta name="viewport" content="width = device-width, initial-scale = 1">
 
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
@@ -131,7 +130,8 @@
       <select id="drop-other" name="department" class="form-control" onchange="Device();">
         <?php
 
-            $qr=$pdo->query("SELECT Name,Department_id from Department");
+            $qr=$pdo->prepare("SELECT Name,Department_id from Department where Company_id= :cid");
+            $qr->execute(array(':cid' => $_SESSION['cid']));
             while($rowx=$qr->fetch(PDO::FETCH_ASSOC))
             {
                 echo '<option value ='.$rowx[Department_id].'>';
@@ -148,7 +148,8 @@
       <select id="drop-other" name="leader" class="form-control" onchange="Device();">
         <?php
 
-            $qr=$pdo->query("SELECT Name,Member_id from Member");            
+            $qr=$pdo->prepare("SELECT Name,Member_id from Member where Company_id = :cid");
+            $qr->execute(array(':cid' => $_SESSION['cid']));
             while($rowx=$qr->fetch(PDO::FETCH_ASSOC))
             {
                 echo '<option value ='.$rowx[Member_id].'>';
@@ -164,7 +165,8 @@
       <select id="drop-other" name="role" class="form-control" onchange="Device();" >
         <?php
 
-            $qr=$pdo->query("SELECT Role_id,Role_name from Role");
+            $qr=$pdo->prepare("SELECT Role_id,Role_name from Role where Company_id = :cid");
+            $qr->execute(array(':cid' => $_SESSION['cid']));
             while($rowx=$qr->fetch(PDO::FETCH_ASSOC))
             {
                 echo '<option value ='.$rowx[Role_id].'>';
