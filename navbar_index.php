@@ -4,9 +4,9 @@
                 <div class="sidebar-header">
                     <?php
                     if (!isset($_SESSION['id']))
-                        echo '<a href="index.php"><h3>Machine Tracking</h3></a>';
+                        echo '<a href="index.php"><h3>PROVE</h3></a>';
                     else
-                        echo '<a href="home.php"><h3>Machine Tracking</h3></a>';
+                        echo '<a href="home.php"><h3>PROVE</h3></a>';
                     ?>
                 </div>
 
@@ -15,8 +15,8 @@
                     <li class="">
                         <a href="#contactmenu" aria-expanded="false">Contact</a>
                         <ul class="list-unstyled" id="contactmenu">
-                            <li><a href="#add_member.php">phadnis.anurag@gmail.com</a></li>
-                            <li><a href="#view_member.php">krishlalwani1@gmail.com</a></li>
+                            <li><a href="#">mohitagl1998@gmail.com</a></li>
+                            <li><a href="#">krishlalwani1@gmail.com</a></li>
 
                         </ul>
                     </li>
@@ -24,10 +24,9 @@
                     <li class="">
                         <a href="#developer">Developed By:</a>
                         <ul class="list-unstyled" id="contactmenu">
-                            <li><a href="#view_member.php">Krish Lalwani</a></li>
-                            <li><a href="#add_member.php">Anurag Phadnis</a></li>
-                            <li><a href="#view_member.php">Husain Attari</a></li>
-                            <li><a href="#add_member.php">Aaditya Rathour</a></li>
+                            <li><a href="#">Krish Lalwani</a></li>
+                            <li><a href="#">Mohit Agrawal</a></li>
+                            <li><a href="#">Nitish Sainani</a></li>
                         </ul>
                     </li>
                 <hr>

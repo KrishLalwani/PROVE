@@ -31,9 +31,9 @@
 		return;
     }
     else {
-        $statement = $pdo->prepare("SELECT Member_id, Company_id, Name FROM Member where Company_id = :cid");
+        $statement = $pdo->prepare("SELECT Member_id, Company_id, Name FROM Member where Company_id = :cid and Leader_id = :lid");
         $statement->execute(array(
-            ':cid' => $_SESSION['cid']));
+            ':cid' => $_SESSION['cid'], ':lid' => $_SESSION['id']));
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
         $json = json_encode($results);
     }

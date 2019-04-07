@@ -13,8 +13,8 @@
 
     if(isset($_POST['add_co']) )
     {
-        $stmt = $pdo->prepare('SELECT COUNT(*) FROM Department WHERE Name = :dn');
-        $stmt->execute(array(':dn' => $_POST['de_name']));
+        $stmt = $pdo->prepare('SELECT COUNT(*) FROM Department WHERE Name = :dn and Company_id = :cid');
+        $stmt->execute(array(':dn' => $_POST['de_name'], ':cid' => $_SESSION['cid']));
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         if($row['COUNT(*)'] !== '0')
         {

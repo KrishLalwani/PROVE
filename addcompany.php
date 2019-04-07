@@ -157,16 +157,17 @@
           <div class="input-group">
           <span class="input-group-addon">Department</span>
           <select id="drop-other" name="department" class="form-control" onchange="Device();">
-            <?php
+              <?php
 
-                $qr=$pdo->query("SELECT Name,Department_id from Department");
-                while($rowx=$qr->fetch(PDO::FETCH_ASSOC))
-                {
-                    echo '<option value ='.$rowx[Department_id].'>';
-                    echo ($rowx['Name']);
-                    echo '</option>';
-                }
-             ?>
+                  $qr=$pdo->prepare("SELECT Name,Department_id from Department where Company_id= :cid");
+                  $qr->execute(array(':cid' => $_SESSION['cid']));
+                  while($rowx=$qr->fetch(PDO::FETCH_ASSOC))
+                  {
+                      echo '<option value ='.$rowx[Department_id].'>';
+                      echo ($rowx['Name']);
+                      echo '</option>';
+                  }
+               ?>
        </select>
         </div></br>
 
@@ -174,33 +175,34 @@
           <div class="input-group">
           <span class="input-group-addon">Leader</span>
           <select id="drop-other" name="leader" class="form-control" onchange="Device();" >
-            <?php
+              <?php
 
-                $qr=$pdo->prepare("SELECT Name,Member_id from Member where Leader_id = :lid");
-                $qr->execute(array(':lid' => $_SESSION['mid']));
-                while($rowx=$qr->fetch(PDO::FETCH_ASSOC))
-                {
-                    echo '<option value ='.$rowx[Member_id].'>';
-                    echo ($rowx['Name']);
-                    echo '</option>';
-                }
-             ?>
+                  $qr=$pdo->prepare("SELECT Name,Member_id from Member where Company_id = :cid");
+                  $qr->execute(array(':cid' => $_SESSION['cid']));
+                  while($rowx=$qr->fetch(PDO::FETCH_ASSOC))
+                  {
+                      echo '<option value ='.$rowx[Member_id].'>';
+                      echo ($rowx['Name']);
+                      echo '</option>';
+                  }
+               ?>
        </select>
         </div></br>
 
           <div class="input-group">
           <span class="input-group-addon">Role</span>
           <select id="drop-other" name="role" class="form-control" onchange="Device();" >
-            <?php
+              <?php
 
-                $qr=$pdo->query("SELECT Role_id,Role_name from Role");
-                while($rowx=$qr->fetch(PDO::FETCH_ASSOC))
-                {
-                    echo '<option value ='.$rowx[Role_id].'>';
-                    echo ($rowx['Role_name']);
-                    echo '</option>';
-                }
-             ?>
+                  $qr=$pdo->prepare("SELECT Role_id,Role_name from Role where Company_id = :cid");
+                  $qr->execute(array(':cid' => $_SESSION['cid']));
+                  while($rowx=$qr->fetch(PDO::FETCH_ASSOC))
+                  {
+                      echo '<option value ='.$rowx[Role_id].'>';
+                      echo ($rowx['Role_name']);
+                      echo '</option>';
+                  }
+               ?>
        </select>
         </div></br>
 

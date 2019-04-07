@@ -3,7 +3,7 @@
     if( !isset($_SESSION['id']) )
     {
         die('ACCESS DENIED');
-    }	
+    }
     require_once "pdo.php";
 ?>
 <html>
@@ -20,26 +20,26 @@
 	<script>
 		$(document).ready(function(){
 			$("#dailybt").click(function(){
-				$("#daily").show();			
+				$("#daily").show();
 				$("#weekly").hide();
 				$("#monthly").hide();
 				$("#over").hide();
 			});
 			$("#weeklybt").click(function(){
-				$("#daily").hide();			
+				$("#daily").hide();
 				$("#weekly").show();
 				$("#monthly").hide();
 				$("#over").hide();
 			});
 			$("#monthlybt").click(function(){
-				$("#daily").hide();			
-				$("#weekly").hide();	
+				$("#daily").hide();
+				$("#weekly").hide();
 				$("#monthly").show();
-				$("#over").hide();				
+				$("#over").hide();
 			});
 			$("#overbt").click(function(){
-				$("#daily").hide();			
-				$("#weekly").hide();	
+				$("#daily").hide();
+				$("#weekly").hide();
 				$("#monthly").hide();
 				$("#over").show();
 			});
@@ -76,41 +76,41 @@
         //echo('<p><a href="logout.php">Logout</a></p>');
 		$i=1;
         $stmtcnt = $pdo->query("SELECT COUNT(*) FROM Score ");
-        $row = $stmtcnt->fetch(PDO::FETCH_ASSOC);		
+        $row = $stmtcnt->fetch(PDO::FETCH_ASSOC);
         if($row['COUNT(*)']!=='0')
-        {           
-			$date = date('Y-m-d');			
+        {
+			$date = date('Y-m-d');
             $stmtread = $pdo->prepare("SELECT * FROM Score WHERE Company_id=:cid AND Time=:time");
-            $stmtread->execute(array(':cid' => $_SESSION['cid'],':time'=>$date));				
-			$arr=[];			
+            $stmtread->execute(array(':cid' => $_SESSION['cid'],':time'=>$date));
+			$arr=[];
             echo ("<table class=\"table table-striped\">
-                <tr> <th>Rank</th><th>Name</th><th>Score</th></tr>");			
+                <tr> <th>Rank</th><th>Name</th><th>Score</th></tr>");
             while ( $row = $stmtread->fetch(PDO::FETCH_ASSOC) )
-            {						
+            {
 				$flag=1;
 				$co=count($arr);
 				if(count($arr)==0)
 				{
 					$arr[0]=$row['Member_id'];
 					$flag=0;
-				}	
+				}
 				else
-				{					
+				{
 					for($j=0;$j<$co;$j++)
-					{															
+					{
 						if($arr[$j]==$row['Member_id'])
 						{
 							$flag=0;
 							break;
-						}					
-					}									
+						}
+					}
 					if($flag==1)
 					{
-						$arr[$i]=$row['Member_id'];								
-						$i++;				
+						$arr[$i]=$row['Member_id'];
+						$i++;
 					}
 				}
-            }			
+            }
 			for($j=0;$j<count($arr);$j++)
 			{
 				$qr=$pdo->prepare("SELECT * from Member where Member_id= :mid");
@@ -126,11 +126,11 @@
                 echo ($j+1);
                 echo ("</td>");
                 echo ("<td>");
-                echo(htmlentities($mid));                
+                echo(htmlentities($mid));
                 echo ("</td>");
                 echo ("<td>");
                 echo(htmlentities($sum));
-                echo ("</td>");  
+                echo ("</td>");
 			}
             echo('</table>');
         }
@@ -156,43 +156,43 @@
         //echo('<p><a href="logout.php">Logout</a></p>');
 		$i=1;
         $stmtcnt = $pdo->query("SELECT COUNT(*) FROM Score ");
-        $row = $stmtcnt->fetch(PDO::FETCH_ASSOC);		
+        $row = $stmtcnt->fetch(PDO::FETCH_ASSOC);
         if($row['COUNT(*)']!=='0')
-        {           
-			$date1 = date('Y-m-d',strtotime($date.'-1 week'));
-			$date2 = date('Y-m-d');			
-			$date3 = date('Y-m-d',strtotime($date2.'-1 day'));
+        {
+            $da2 = date('Y-m-d');
+            $da1 = date('Y-m-d',strtotime($da2.'-7 day'));
+			//$da3 = date('Y-m-d',strtotime($da2.'day'));
             $stmtread = $pdo->prepare("SELECT * FROM Score WHERE Company_id=:cid AND Time between :time AND :time1");
-            $stmtread->execute(array(':cid' => $_SESSION['cid'],':time'=>$date1,':time1'=>$date3));				
-			$arr=[];			
+            $stmtread->execute(array(':cid' => $_SESSION['cid'],':time'=>$da1,':time1'=>$da2));
+			$arr=[];
             echo ("<table class=\"table table-striped\">
-                <tr> <th>Rank</th><th>Name</th><th>Score</th></tr>");			
+                <tr> <th>Rank</th><th>Name</th><th>Score</th></tr>");
             while ( $row = $stmtread->fetch(PDO::FETCH_ASSOC) )
-            {						
+            {
 				$flag=1;
 				$co=count($arr);
 				if(count($arr)==0)
 				{
 					$arr[0]=$row['Member_id'];
 					$flag=0;
-				}	
+				}
 				else
-				{					
+				{
 					for($j=0;$j<$co;$j++)
-					{															
+					{
 						if($arr[$j]==$row['Member_id'])
 						{
 							$flag=0;
 							break;
-						}					
-					}									
+						}
+					}
 					if($flag==1)
 					{
-						$arr[$i]=$row['Member_id'];								
-						$i++;				
+						$arr[$i]=$row['Member_id'];
+						$i++;
 					}
 				}
-            }			
+            }
 			for($j=0;$j<count($arr);$j++)
 			{
 				$qr=$pdo->prepare("SELECT * from Member where Member_id= :mid");
@@ -200,7 +200,7 @@
                 $rowtmp=$qr->fetch(PDO::FETCH_ASSOC);
                 $mid=$rowtmp['Name'];
 				$qr1=$pdo->prepare("SELECT sum(Points) as result from Score where Member_id= :mid AND Time between :time AND :time1");
-                $qr1->execute(array(':mid' => $arr[$j],':time'=>$date1,':time1'=>$date3));
+                $qr1->execute(array(':mid' => $arr[$j],':time'=>$da1,':time1'=>$da2));
 				$row1=$qr1->fetch(PDO::FETCH_ASSOC);
 				$sum=$row1['result'];
                 echo ("<tr>");
@@ -208,11 +208,11 @@
                 echo ($j+1);
                 echo ("</td>");
                 echo ("<td>");
-                echo(htmlentities($mid));                
+                echo(htmlentities($mid));
                 echo ("</td>");
                 echo ("<td>");
                 echo(htmlentities($sum));
-                echo ("</td>");  
+                echo ("</td>");
 			}
             echo('</table>');
         }
@@ -239,43 +239,43 @@
         //echo('<p><a href="logout.php">Logout</a></p>');
 		$i=1;
         $stmtcnt = $pdo->query("SELECT COUNT(*) FROM Score ");
-        $row = $stmtcnt->fetch(PDO::FETCH_ASSOC);		
+        $row = $stmtcnt->fetch(PDO::FETCH_ASSOC);
         if($row['COUNT(*)']!=='0')
-        {           
+        {
 			$date = date('Y-m-d',strtotime($date.'-1 month'));
 			$date1 = date('Y-m-d');
-			$date2 = date('Y-m-d',strtotime($date1.'-1 day'));
+			//$date2 = date('Y-m-d',strtotime($date1.'-1 day'));
             $stmtread = $pdo->prepare("SELECT * FROM Score WHERE Company_id=:cid AND Time between :time AND :time1");
-            $stmtread->execute(array(':cid' => $_SESSION['cid'],':time'=>$date,':time1'=>$date2));
-			$arr=[];			
+            $stmtread->execute(array(':cid' => $_SESSION['cid'],':time'=>$date,':time1'=>$date1));
+			$arr=[];
             echo ("<table class=\"table table-striped\">
-                <tr> <th>Rank</th><th>Name</th><th>Score</th></tr>");			
+                <tr> <th>Rank</th><th>Name</th><th>Score</th></tr>");
             while ( $row = $stmtread->fetch(PDO::FETCH_ASSOC) )
-            {						
+            {
 				$flag=1;
 				$co=count($arr);
 				if(count($arr)==0)
 				{
 					$arr[0]=$row['Member_id'];
 					$flag=0;
-				}	
+				}
 				else
-				{					
+				{
 					for($j=0;$j<$co;$j++)
-					{															
+					{
 						if($arr[$j]==$row['Member_id'])
 						{
 							$flag=0;
 							break;
-						}					
-					}									
+						}
+					}
 					if($flag==1)
 					{
-						$arr[$i]=$row['Member_id'];								
-						$i++;				
+						$arr[$i]=$row['Member_id'];
+						$i++;
 					}
 				}
-            }			
+            }
 			for($j=0;$j<count($arr);$j++)
 			{
 				$qr=$pdo->prepare("SELECT * from Member where Member_id= :mid");
@@ -283,7 +283,7 @@
                 $rowtmp=$qr->fetch(PDO::FETCH_ASSOC);
                 $mid=$rowtmp['Name'];
 				$qr1=$pdo->prepare("SELECT sum(Points) as result from Score where Member_id= :mid AND Time between :time AND :time1");
-                $qr1->execute(array(':mid' => $arr[$j],':time'=>$date,':time1'=>$date2));
+                $qr1->execute(array(':mid' => $arr[$j],':time'=>$date,':time1'=>$date1));
 				$row1=$qr1->fetch(PDO::FETCH_ASSOC);
 				$sum=$row1['result'];
                 echo ("<tr>");
@@ -291,16 +291,16 @@
                 echo ($j+1);
                 echo ("</td>");
                 echo ("<td>");
-                echo(htmlentities($mid));                
+                echo(htmlentities($mid));
                 echo ("</td>");
                 echo ("<td>");
                 echo(htmlentities($sum));
-                echo ("</td>");  
+                echo ("</td>");
 			}
             echo('</table>');
         }
     ?>
-	</div>	
+	</div>
 	<div class="container-fluid row" id="over" style="display:none;">
 	<div class="page-header">
 	<h1>Overall Leaderboard</h1>
@@ -320,40 +320,40 @@
         //echo('<p><a href="logout.php">Logout</a></p>');
 		$i=1;
         $stmtcnt = $pdo->query("SELECT COUNT(*) FROM Score ");
-        $row = $stmtcnt->fetch(PDO::FETCH_ASSOC);		
+        $row = $stmtcnt->fetch(PDO::FETCH_ASSOC);
         if($row['COUNT(*)']!=='0')
-        {           
+        {
             $stmtread = $pdo->prepare("SELECT * FROM Score WHERE Company_id=:cid");
-            $stmtread->execute(array(':cid' => $_SESSION['cid']));				
-			$arr=[];			
+            $stmtread->execute(array(':cid' => $_SESSION['cid']));
+			$arr=[];
             echo ("<table class=\"table table-striped\">
-                <tr> <th>Rank</th><th>Name</th><th>Score</th></tr>");			
+                <tr> <th>Rank</th><th>Name</th><th>Score</th></tr>");
             while ( $row = $stmtread->fetch(PDO::FETCH_ASSOC) )
-            {						
+            {
 				$flag=1;
 				$co=count($arr);
 				if(count($arr)==0)
 				{
 					$arr[0]=$row['Member_id'];
 					$flag=0;
-				}	
+				}
 				else
-				{					
+				{
 					for($j=0;$j<$co;$j++)
-					{															
+					{
 						if($arr[$j]==$row['Member_id'])
 						{
 							$flag=0;
 							break;
-						}					
-					}									
+						}
+					}
 					if($flag==1)
 					{
-						$arr[$i]=$row['Member_id'];								
-						$i++;				
+						$arr[$i]=$row['Member_id'];
+						$i++;
 					}
 				}
-            }			
+            }
 			for($j=0;$j<count($arr);$j++)
 			{
 				$qr=$pdo->prepare("SELECT * from Member where Member_id= :mid");
@@ -369,11 +369,11 @@
                 echo ($j+1);
                 echo ("</td>");
                 echo ("<td>");
-                echo(htmlentities($mid));                
+                echo(htmlentities($mid));
                 echo ("</td>");
                 echo ("<td>");
                 echo(htmlentities($sum));
-                echo ("</td>");  
+                echo ("</td>");
 			}
             echo('</table>');
         }
